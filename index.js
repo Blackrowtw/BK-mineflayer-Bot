@@ -10,11 +10,7 @@ console.logTimer = logTimer;
 const { errorHandler } = require("./source/errorHandler");
 
 // 可選用模組
-const Modules = [
-  // "./source/module/action-chat",
-  "./source/module/chat-extra-check.js",
-  "./source/module/action-lookAt",
-];
+const Modules = ["./source/module/action-lookAt"];
 
 // Bot 延遲設定
 const botTimer = { waitForLoading: 5000, respawn: 60000 };
