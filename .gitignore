@@ -1,0 +1,18 @@
+# Logs
+*.log
+
+# Dependency directories
+node_modules/
+
+# dotenv environment variables file
+*.env*
+!.env
+!.env.local
+
+# dev...
+dev.js
+test.js
+
+test/
+
+*.pdf

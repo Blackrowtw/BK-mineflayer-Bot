@@ -1,0 +1,27 @@
+{
+  "name": "myflayer_1.21",
+  "version": "v1.0",
+  "description": "代碼學習測試_掛機用bot",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [
+    ""
+  ],
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "BlacKrow",
+  "license": "MIT",
+  "dependencies": {
+    "dateformat": "^3.0.3",
+    "delay": "^4.4.1",
+    "dotenv": "^16.4.7",
+    "mineflayer": "^4.23.0",
+    "mineflayer-pathfinder": "^2.4.5",
+    "mineflayer-statemachine": "^1.7.0",
+    "vec3": "^0.1.10"
+  }
+}
