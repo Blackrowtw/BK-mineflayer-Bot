@@ -10,11 +10,13 @@
 
 ## BK's mineflayer Bot
 
-配合自己的遊玩習慣設計的Bot，靈感來源於 Carpet 的 fakeplayer (假人)，
+配合自己的遊玩習慣設計的Bot，靈感來源於 Carpet 的 fakeplayer (假人)
+
 可以在遊戲中用指令控制機器人的動作，主要用來維持機器運作，農場生產。
+
 主程式功能受 [fubira/TemzinBot](https://github.com/fubira/TemzinBot) 啟發，作為參考並重構。
 
-另外以 MakkusuOtaku [Github](https://github.com/MakkusuOtaku)[YouTube](https://www.youtube.com/@MakkusuOtaku)的各種神奇的 Bot 功能為未來開發的目標。
+另外以 MakkusuOtaku/[Github](https://github.com/MakkusuOtaku)/[YouTube](https://www.youtube.com/@MakkusuOtaku) 的各種神奇的 Bot 功能為未來開發的目標。
 
 ## 使用方式：
 
@@ -23,6 +25,9 @@
 3. 調整 .env 文件選擇伺服器的登入檔案，可不做更動，會使用預設 lacal 本地服務器
 4. 本地測試 Bot 可進入單人遊戲 > 在區網上公開 > 允許指令：開啟 > 連接埠號碼 25565 > 開始區網世界
 5. 命令行執行 `npm start` 即可看到 mineflayer 登入遊戲中
+
+
+## 功能介紹：
 
 ### 目前已實現的主要功能：
 
@@ -45,7 +50,7 @@
 - **空置域鋪地板模式**。    *...*
 - **村民種田模式**。        *...*
 
-### TO~~(probably not)~~DO：
+### TO(probably not)DO：
 
 - [ ] 部分參數放入 .env 統一管理
 - [ ] 命令系統追加主人識別
@@ -55,7 +60,7 @@
 
 ## Commands
 
-此處仍在開發中，部分功能不可用或未完成。
+指令仍在開發中，部分功能不可用或未完成。
 
 指令解析前綴 `@bot`
 
