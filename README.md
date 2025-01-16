@@ -64,8 +64,9 @@
 
 指令解析前綴 `@bot`
 
+### 暫時整理
 <details>
-### 暫時整理<summary></summary>
+<summary></summary>
 
 #### "say":
 
