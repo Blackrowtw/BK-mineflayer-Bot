@@ -1,13 +1,19 @@
 # A Minecraft multifunctional Bot 1.21
 
-[Mineflayer](https://github.com/PrismarineJS/mineflayer) ，由 JavaScript [API](https://github.com/PrismarineJS/mineflayer/blob/master/docs/api.md)寫成，運行在 Node.js 上的機器人項目。
-支持環境感知、實體互動、物理運動引擎、背包資源管理、挖掘和建造甚至更多的功能，豐富的接口幾乎可以實現遊戲的任何功能。
+[Mineflayer](https://github.com/PrismarineJS/mineflayer)，由 JavaScript [API](https://github.com/PrismarineJS/mineflayer/blob/master/docs/api.md)寫成，運行在 Node.js 上的機器人項目。
+
+支持環境感知、實體互動、物理運動引擎、背包資源管理、挖掘和建造甚至更多的功能，
+
+豐富的接口幾乎可以實現遊戲的任何功能。
+
+---
 
 ## BK's mineflayer Bot
 
 配合自己的遊玩習慣設計的Bot，靈感來源於 Carpet 的 fakeplayer (假人)，
 可以在遊戲中用指令控制機器人的動作，主要用來維持機器運作，農場生產。
 主程式功能受 [fubira/TemzinBot](https://github.com/fubira/TemzinBot) 啟發，作為參考並重構。
+
 另外以 MakkusuOtaku [Github](https://github.com/MakkusuOtaku)[YouTube](https://www.youtube.com/@MakkusuOtaku)的各種神奇的 Bot 功能為未來開發的目標。
 
 ## 使用方式：
@@ -18,28 +24,28 @@
 4. 本地測試 Bot 可進入單人遊戲 > 在區網上公開 > 允許指令：開啟 > 連接埠號碼 25565 > 開始區網世界
 5. 命令行執行 `npm start` 即可看到 mineflayer 登入遊戲中
 
-#### 目前已實現的主要功能：
+### 目前已實現的主要功能：
 
-- **可自訂登入訊息**。可以分開儲存不同伺服器和帳號資料。
-- **敏感訊息保護**。 .env 檔案作為環境變量引入程式碼。
-- **模組化設計**。除了基本功能外的函數由模塊引入，方便切換不同功能與開發。
-- **安全引入模組**。用來引入模組的模組，防止檔案有問題造成程式崩潰。
-- **錯誤處理模組**。偵測未預期的錯誤，防止程式停止，一段時間後重新嘗試登入。
-- **命令行操作**。使用 Readline [API](https://nodejs.org/api/readline.html) 可在命令行操控 Bot 說話與接受指令。
-- **安全聊天模塊**。防止 Bot 洗頻與重複發話。
-- **紀錄伺服器的聊天訊息。** 加上時間標籤並回傳到命令行。
-- **命令系統**。用 fakeplayer 的方式用指令控制 Bot 行為。
+- **可自訂登入訊息**。  可以分開儲存不同伺服器和帳號資料。
+- **敏感訊息保護**。     .env 檔案作為環境變量引入程式碼。
+- **模組化設計**。      除了基本功能外的函數由模塊引入，方便切換不同功能與開發。
+- **安全引入模組**。    用來引入模組的模組，防止檔案有問題造成程式崩潰。
+- **錯誤處理模組**。    偵測未預期的錯誤，防止程式停止，一段時間後重新嘗試登入。
+- **命令行操作**。      使用 Readline [API](https://nodejs.org/api/readline.html) 可在命令行操控 Bot 說話與接受指令。
+- **安全聊天模塊**。    防止 Bot 洗頻與重複發話。
+- **紀錄聊天訊息。**    加上時間標籤並回傳到命令行。
+- **命令系統**。        用 fakeplayer 的方式用指令控制 Bot 行為。
 
-#### 待開發的模組：
+### 待開發的模組：
 
-- **待機模式**。讓 Bot 自動轉頭看向最近的玩家。與玩家互動，*待開發 ...*
-- **定時開關機器**。*待開發 ...*
-- **行為樹系統**。*待開發 ...*
-- **PVE模式**。*待開發 ...*
-- **空置域鋪地板模式**。*待開發 ...*
-- **村民種田模式**。*待開發 ...*
+- **待機模式**。            讓 Bot 自動轉頭看向最近的玩家。與玩家互動，*開發中 ...*
+- **定時開關機器**。        *...*
+- **行為樹系統**。          *...*
+- **PVE模式**。             *...*
+- **空置域鋪地板模式**。    *...*
+- **村民種田模式**。        *...*
 
-#### TO(probably not)DO：
+### TO~~(probably not)~~DO：
 
 - [ ] 部分參數放入 .env 統一管理
 - [ ] 命令系統追加主人識別
@@ -54,7 +60,7 @@
 指令解析前綴 `@bot`
 
 <details>
-<summary>暫時整理</summary>
+<summary>### 暫時整理</summary>
 
 #### "say":
 
