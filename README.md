@@ -1,4 +1,4 @@
-# A Minecraft multifunctional Bot 1.21
+# A Minecraft multifunctional Bot 1.21.4
 
 [Mineflayer](https://github.com/PrismarineJS/mineflayer)，由 JavaScript [API](https://github.com/PrismarineJS/mineflayer/blob/master/docs/api.md)寫成，運行在 Node.js 上的機器人項目。
 
@@ -21,7 +21,7 @@
 ## 使用方式
 
 1. 首先安裝 [Node.js](https://nodejs.org/zh-tw) 版本 >= 18
-2. 下載本倉庫並解壓所文件，在同文件資料夾下運行 `npm install` 初始化並安裝所依賴的模組
+2. 下載本倉庫並解壓縮文件，在同文件資料夾下運行 `npm install` 初始化並安裝所依賴的模組
 3. 調整 .env 文件選擇伺服器的登入檔案，可不做更動，會使用預設 lacal 本地服務器
 4. 本地測試 Bot 可進入單人遊戲 > 在區網上公開 > 允許指令：開啟 > 連接埠號碼 25565 > 開始區網世界
 5. 命令行執行 `npm start` 即可看到 mineflayer 登入遊戲中
