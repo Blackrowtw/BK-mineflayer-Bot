@@ -1,0 +1,40 @@
+{
+  "name": "bk-mineflayer-bot_mc1.21",
+  "version": "v2.0",
+  "description": "個人學習node.js_輔助玩家遊戲_多功能bot",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "postinstall": "patch-package"
+  },
+  "keywords": [
+    ""
+  ],
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "BlacKrow",
+  "license": "MIT",
+  "dependencies": {
+    "canvas": "^3.1.0",
+    "dateformat": "^3.0.3",
+    "delay": "^4.4.1",
+    "dotenv": "^16.4.7",
+    "mineflayer": "^4.23.0",
+    "mineflayer-auto-eat": "^5.0.0",
+    "mineflayer-collectblock": "^1.6.0",
+    "mineflayer-pathfinder": "^2.4.5",
+    "mineflayer-pvp": "^1.3.2",
+    "mineflayer-statemachine": "^1.7.0",
+    "prismarine-viewer": "^1.33.0",
+    "vec3": "^0.1.10"
+  },
+  "devDependencies": {
+    "patch-package": "^8.0.0"
+  },
+  "__note__": "patches 補釘鎖定版本",
+  "resolutions": {
+    "mineflayer-pvp": "1.3.2"
+  }
+}

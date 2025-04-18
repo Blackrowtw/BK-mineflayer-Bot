@@ -1,0 +1,20 @@
+# Logs
+*.log
+_log/*
+
+# Dependency directories
+node_modules/
+
+# dotenv environment variables file
+*.env*
+!.env
+!.env.sample
+
+# dev...
+dev.js
+test.js
+
+_test/
+source/module/_customized/
+
+*.pdf
