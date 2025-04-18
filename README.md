@@ -1,16 +1,16 @@
 # A Minecraft multifunctional Bot 1.21.1
 
+[![](https://img.shields.io/badge/minecraft-1.21-%2355FF55.svg?style=for-the-badge&labelColor=gray)](https://www.minecraft.net/) [![](https://img.shields.io/badge/mineflayer-4.27.0-%23000000.svg?style=for-the-badge&labelColor=gray)](https://github.com/PrismarineJS/mineflayer)
+
 ---
 
 ## What is mineflayer?
 
-[Mineflayer](https://github.com/PrismarineJS/mineflayer)：由 JavaScript [API](https://github.com/PrismarineJS/mineflayer/blob/master/docs/api.md) 寫成，運行在 Node.js 上的機器人項目。
+Mineflayer：由 JavaScript [API](https://github.com/PrismarineJS/mineflayer/blob/master/docs/api.md) 寫成，運行在 Node.js 上的機器人項目。
 
 支持環境感知、實體互動、物理運動引擎、背包資源管理、挖掘和建造甚至更多的功能，
 
 豐富的接口幾乎可以實現遊戲的任何功能。
-
----
 
 ## BK's mineflayer Bot
 
@@ -33,7 +33,7 @@
 以 EmergentGarden [[YouTube](https://www.youtube.com/@EmergentGarden)] 及
 kolbytn 的 mindcraft [[Github](https://github.com/kolbytn/mindcraft)] 為未來的開發目標。
 
-## 使用方式
+## 使用方式 Usage
 
 1. 首先安裝 [Node.js](https://nodejs.org/zh-tw) `版本 >= 18`，可參考 [Mineflayer](https://github.com/PrismarineJS/mineflayer) 官方文檔安裝
 2. 下載本倉庫並解壓縮文件，在同文件資料夾下運行 `npm install` 初始化並安裝所依賴的模組
@@ -42,7 +42,7 @@ kolbytn 的 mindcraft [[Github](https://github.com/kolbytn/mindcraft)] 為未來
 5. 進行 Bot 本地測試：`進入單人遊戲 > 在區網上公開 > 允許指令：開啟 > 連接埠號碼 25565 > 開始區網世界`
 6. 最後於命令行執行 `npm start` 即可看到 mineflayer 登入遊戲中
 
-## 功能介紹
+## 功能介紹 Functions
 
 ### 目前已實現的主要功能
 
@@ -66,7 +66,7 @@ kolbytn 的 mindcraft [[Github](https://github.com/kolbytn/mindcraft)] 為未來
 - [ ] 使用 nexe 將 Node.js 的 Bot 代碼包裝成 exe 應用程式
 - [ ] 讓 主 Bot 控制 子Bot 共同協作
 
-## Commands
+## 指令系統 Commands
 
 指令仍在開發中，部分功能不可用或未完成。
 
