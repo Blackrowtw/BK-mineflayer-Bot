@@ -1,6 +1,8 @@
 # A Minecraft multifunctional Bot 1.21.1
 
-[Mineflayer](https://github.com/PrismarineJS/mineflayer)，由 JavaScript [API](https://github.com/PrismarineJS/mineflayer/blob/master/docs/api.md)寫成，運行在 Node.js 上的機器人項目。
+## What is mineflayer?
+
+[Mineflayer](https://github.com/PrismarineJS/mineflayer)：由 JavaScript [API](https://github.com/PrismarineJS/mineflayer/blob/master/docs/api.md)寫成，運行在 Node.js 上的機器人項目。
 
 支持環境感知、實體互動、物理運動引擎、背包資源管理、挖掘和建造甚至更多的功能，
 
