@@ -24,17 +24,17 @@
 
 主程式功能受 [fubira/TemzinBot](https://github.com/fubira/TemzinBot) 啟發，作為參考並重構。
 
-以 MakkusuOtaku[[Github](https://github.com/MakkusuOtaku)] [[YouTube](https://www.youtube.com/@MakkusuOtaku)] 作為靈感來源。
+以 MakkusuOtaku [[Github](https://github.com/MakkusuOtaku)] [[YouTube](https://www.youtube.com/@MakkusuOtaku)] 作為靈感來源。
 
-以 EmergentGarden[[YouTube](https://www.youtube.com/@EmergentGarden)] 及
-kolbytn 的 mindcraft[[Github](https://github.com/kolbytn/mindcraft)] 為未來的開發目標。
+以 EmergentGarden [[YouTube](https://www.youtube.com/@EmergentGarden)] 及
+kolbytn 的 mindcraft [[Github](https://github.com/kolbytn/mindcraft)] 為未來的開發目標。
 
 ## 使用方式
 
-1. 首先安裝 [Node.js](https://nodejs.org/zh-tw) 版本 >= 18，可參考 [Mineflayer](https://github.com/PrismarineJS/mineflayer) 官方文檔安裝
+1. 首先安裝 [Node.js](https://nodejs.org/zh-tw) `版本 >= 18`，可參考 [Mineflayer](https://github.com/PrismarineJS/mineflayer) 官方文檔安裝
 2. 下載本倉庫並解壓縮文件，在同文件資料夾下運行 `npm install` 初始化並安裝所依賴的模組
-3. 再來調整 .env 文件內容，ENV_SEVER_SELECTOR 參數為選擇機器人的登入檔案，使用 # 井字註解取消不需要檔案
-4. 在不做任何更改的情況下，會使用預設 sample 中的配置連接本地的服務器
+3. 再來調整 `.env` 文件內容，`ENV_SEVER_SELECTOR` 參數為選擇機器人的登入檔案，使用 # 井字註解取消不需要檔案
+4. 在不做任何更改的情況下，會使用預設 `.env.sample` 中的配置連接本地的服務器
 5. 進行 Bot 本地測試：`進入單人遊戲 > 在區網上公開 > 允許指令：開啟 > 連接埠號碼 25565 > 開始區網世界`
 6. 最後於命令行執行 `npm start` 即可看到 mineflayer 登入遊戲中
 
@@ -54,8 +54,8 @@ kolbytn 的 mindcraft[[Github](https://github.com/kolbytn/mindcraft)] 為未來�
 
 ### TO(probably not)DO
 
-- [ ] **AI 聊天系統**。       接入本地的 Ollama 模型回答玩家的提問，預計擴展為可用API接入，以及建立聊天資料庫。*開發中 ...*
-- [ ] **待機模式**。          讓 Bot 自動轉頭看向最近的玩家，與玩家互動。*開發中 ...*
+- [ ] **AI 聊天系統**。       接入本地的 Ollama 模型回答玩家的提問，預計擴展為可用API接入，以及建立聊天資料庫。
+- [ ] **待機模式**。          讓 Bot 自動轉頭看向最近的玩家，與玩家互動。
 - [ ] **空置域鋪地板模式**。   *...*
 - [ ] **任務系統**。          *...*
 
@@ -66,12 +66,9 @@ kolbytn 的 mindcraft[[Github](https://github.com/kolbytn/mindcraft)] 為未來�
 
 指令仍在開發中，部分功能不可用或未完成。
 
-指令解析前綴 `@b`
+--
 
-### 暫時整理
-<details>
-<summary></summary>
-以下是所有 @b 可用的命令，共 56 項：
+以下是所有 `@b` 可用的命令，共 56 項：
 
 ◈ System ◈
 - help / 幫助：生成所有 BK-Bot 可用的指令，並輸出到命令行
@@ -145,5 +142,3 @@ kolbytn 的 mindcraft[[Github](https://github.com/kolbytn/mindcraft)] 為未來�
 ◈ *Uncategorized ◈
 - _sample：just a command sample for copy
 - test：a command for quick test
-
-</details>
