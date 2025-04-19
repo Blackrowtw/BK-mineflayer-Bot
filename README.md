@@ -14,6 +14,10 @@ Mineflayer：由 JavaScript [API](https://github.com/PrismarineJS/mineflayer/bl
 
 ## BK's mineflayer Bot
 
+
+https://github.com/user-attachments/assets/071c2f1b-8468-45b9-964c-8b8e67a9c7f6
+
+
 配合自己的遊玩習慣設計的Bot，靈感來源於 Carpet 的 fakeplayer (假人)
 
 可以在遊戲中用指令控制機器人的動作，主要用來維持機器運作，農場生產。
