@@ -5,7 +5,8 @@ const { resetANSI, BLACK } = require("../escapeCodeANSI.js");
 
 async function initAIChat(bot) {
   const isEnabled = bot.Bot_Config.aiChatSetting.isEnabled;
-  const prefix = bot.Bot_Config.aiChatSetting.prefix;
+  const cmdPrefix = bot.Bot_Config.commandSitting.prefix;
+  const aiChatPrefix = bot.Bot_Config.aiChatSetting.prefix;
   const playerInRange = bot.Bot_Config.aiChatSetting.checkPlayerInRange;
   if (!isEnabled || isEnabled !== true) return; // 如果未啟用，則返回
 
@@ -63,7 +64,7 @@ async function initAIChat(bot) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          model: "deepseek-r1:8b",
+          model: "qwen:7b-chat",
           prompt: fullPrompt,
           stream: false,
         }),
@@ -133,11 +134,7 @@ async function initAIChat(bot) {
       ---
       `,
 
-    generatePrompt: (
-      username,
-      question,
-      context
-    ) => `${AI_TEMPLATE.systemPrompt}
+    generatePrompt: (username, question) => `${AI_TEMPLATE.systemPrompt}
       當前玩家: ${username}
       問題: ${question}
       `,
@@ -148,8 +145,8 @@ async function initAIChat(bot) {
     const msgText = jsonMsg?.json?.with?.[1]?.[""] ?? "";
 
     if (username === bot.username) return; // 忽略 bot 自己的訊息
-    if (msgText.startsWith("@b")) return; // 忽略 @b 開頭的命令訊息
-    if (!msgText.startsWith("@a")) return; // 忽略非 @a 開頭的訊息
+    if (msgText.startsWith(cmdPrefix)) return; // 忽略 @b 開頭的命令訊息
+    if (!msgText.startsWith(aiChatPrefix)) return; // 忽略非 @a 開頭的訊息
 
     if (!isPlayerNearby(username)) {
       bot.safeChat(`${username} 靠近一點再跟我說話吧！`);

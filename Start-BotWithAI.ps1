@@ -15,7 +15,7 @@ function Test-OllamaRunning {
 function Start-Ollama {
     Write-Host "啟動 Ollama deepseek 模型..." -ForegroundColor Yellow
     try {
-        Start-Process -FilePath "ollama" -ArgumentList "run deepseek-r1:8b" -WindowStyle Hidden
+        Start-Process -FilePath "ollama" -ArgumentList "run qwen:7b-chat" -WindowStyle Hidden
         Write-Host "等待 Ollama 啟動..." -ForegroundColor Yellow
         Start-Sleep -Seconds 5
     } catch {
