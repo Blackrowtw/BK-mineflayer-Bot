@@ -4,7 +4,6 @@ module.exports = [
     aliases: ["tree2x2"],
     interval: 2000,
     onStart: async (bot, cmd, options) => {
-      cmd.isPlaceTree = false;
       cmd.isSapling = false;
       cmd.dirtCoords = [];
       cmd.saplingItems = [];
@@ -27,26 +26,26 @@ module.exports = [
         );
         cmd.saplingItems.push(bot.heldItem);
       } else {
-        bot.safeChat(`我手上沒東西可以種`);
+        bot.safeChat(`我手上沒有可以種的東西`, `❌`);
       }
       if (!cmd.dirtCoords || cmd.dirtCoords.length === 0) {
-        await bot.safeChat(`附近找不到 ${cmd.whiteListBlocks}`);
+        await bot.safeChat(`附近找不到 ${cmd.whiteListBlocks}`, `❌`);
       }
       // console.log(cmd.saplingItems);
     },
     execute: async (bot, cmd, options) => {
+      let isPlaceTree = false;
       placeSaplings();
       async function placeSaplings() {
         // 如果目前正在放置樹苗，或樹苗狀態不允許則直接返回
-        if (cmd.isPlaceTree || !cmd.isSapling) return;
+        if (isPlaceTree || !cmd.isSapling) return;
         if (!cmd.dirtCoords || cmd.dirtCoords.length === 0) return;
 
         // 設定為正在放置樹苗中，避免重複觸發
-        cmd.isPlaceTree = true;
-
-        // 逐一處理每個坐標
-        for (const pos of cmd.dirtCoords) {
-          try {
+        isPlaceTree = true;
+        try {
+          // 逐一處理每個坐標
+          for (const pos of cmd.dirtCoords) {
             const topFace = pos.offset(0, 1, 0);
             const airBlock = bot.blockAt(topFace);
             const targetBlock = bot.blockAt(pos);
@@ -80,12 +79,13 @@ module.exports = [
               // 等待一個 tick（以確保動作執行穩定）
               await bot.waitForTicks(1);
             }
-          } catch (loopError) {
-            console.error("處理座標時出錯：", loopError);
           }
+        } catch (loopError) {
+          console.error("處理座標時出錯：", loopError);
+          isPlaceTree = false;
         }
         // 放置樹苗完成後重置旗標
-        cmd.isPlaceTree = false;
+        isPlaceTree = false;
       }
     },
     group: `dev`,
