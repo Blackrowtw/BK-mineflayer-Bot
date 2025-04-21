@@ -106,33 +106,30 @@ async function botOnChat(bot) {
      * @returns {Promise<Array<string>|null>} - 提取的指令關鍵字陣列，若無效則返回 null
      */
     function genKeys(jsonMsg, message) {
-      // 新增正則表達式轉義函式 (防止特殊符號(如 . * ?) 被解析成正則控制字符)
+      // 新增正則表達式轉義函式：防止特殊符號(如 . * ?) 被解析成正則控制字符
       const escapeRegExp = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
       try {
-        // 取出訊息內容，優先從 jsonMsg 中提取
+        // 取出訊息內容：優先從 jsonMsg 中提取
         let msgText = jsonMsg?.json?.with?.[1]?.[""] ?? message ?? "";
 
-        // 如果 msgText 不是字串或為空，返回 null
+        // 基本驗證：如果 msgText 不是字串或為空，返回 null
         if (typeof msgText !== "string" || msgText.trim() === "") return null;
+
+        // 檢查是否以命令前綴開始 (嚴格檢查開頭位置)
+        const startWithPrefix = new RegExp(
+          `^${escapeRegExp(commandPrefix)}\\s+`,
+          "i"
+        );
+        if (!startWithPrefix.test(msgText)) return null;
 
         // 使用空格分割字符串
         const processKeys = msgText.split(" ");
 
-        // 獲取所有包含 @bot (commandPrefix) 的元素的索引
-        const botIndices = processKeys
-          .map((key, index) => {
-            // 動態生成正則表達式，包含轉義處理與大小寫不敏感
-            const prefixPattern = new RegExp(escapeRegExp(commandPrefix), "i");
-            return prefixPattern.test(key) ? index : -1;
-          })
-          .filter((index) => index !== -1);
+        // 驗證不能只有前綴
+        if (processKeys.length <= 1) return null;
 
-        // 如果找不到任何 @bot (commandPrefix)，返回 null
-        if (botIndices.length === 0) return null;
-
-        // 取第一個 @bot (commandPrefix) 的索引處開始的部分
-        const keys = processKeys.slice(botIndices[0]);
-
+        // 直接取出命令部分
+        const keys = processKeys.slice(0);
         return keys;
       } catch (err) {
         bot.logTimer(`[bot.on.chat] genKeys Error: ${err.message}`);

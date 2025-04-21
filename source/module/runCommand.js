@@ -22,7 +22,7 @@ async function runCommand(bot, keys, cmdSender) {
 
   // 檢查 keys 長度是否為 1 代表只有 @bot (commandPrefix)
   if (keys.length < 2) {
-    bot.safeChat("夏蟲也為我沉默");
+    bot.safeChat(`使用 ${keys[0]} help 命令，獲取可用命令列表。`, `🛈`);
     return;
   }
 
@@ -50,7 +50,7 @@ async function commandHandler(bot, keys, cmdSender) {
   // 檢查命令狀態
   if (!loopCmdID) {
     bot.logTimer(`[runCommand] ⚠ 未知命令: ${commandName}`);
-    await bot.safeChat(`好人你幫幫人民的啦，阿哇丟誇謀 ${commandName} `);
+    await bot.safeChat(`好人你幫幫人民的啦，阿哇丟誇謀蝦米喜 ${commandName} `);
     return;
   }
 
