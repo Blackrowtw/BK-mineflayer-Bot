@@ -5,7 +5,6 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "start:ai": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"& {$OutputEncoding = [Console]::OutputEncoding = [Text.Encoding]::UTF8; .\\Start-BotWithAI.ps1}\"",
     "postinstall": "patch-package"
   },
   "keywords": [
@@ -29,6 +28,7 @@
     "mineflayer-pvp": "^1.3.2",
     "mineflayer-statemachine": "^1.7.0",
     "mineflayer-tool": "^1.2.0",
+    "opencc-js": "^1.0.5",
     "prismarine-viewer": "^1.33.0",
     "vec3": "^0.1.10"
   },

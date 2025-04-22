@@ -85,8 +85,23 @@ async function main() {
       },
       aiChatSetting: {
         isEnabled: parseConfig(process.env.BOT_AI_CHAT) || false,
+        modelName: parseConfig(process.env.BOT_AI_CHAT_MODEL) || "",
+        apiUrl: parseConfig(process.env.BOT_AI_CHAT_API_URL) || "",
         prefix: parseConfig(process.env.BOT_AI_CHAT_PREFIX) || "@ai",
         checkPlayerInRange: parseConfig(process.env.BOT_AI_CHAT_RANGE) || 16,
+        templateFolder:
+          parseConfig(process.env.BOT_AI_CHAT_TEMPLATE_FOLDER) ||
+          "./AI_prompt/minecraft.template.js",
+        templateId: parseConfig(process.env.BOT_AI_CHAT_TEMPLATE_ID) || 1,
+        generationParams: {
+          temperature: parseConfig(process.env.BOT_AI_CHAT_PARAMS_TEM) || 0.8,
+          top_p: parseConfig(process.env.BOT_AI_CHAT_PARAMS_TOP_P) || 0.9,
+          max_tokens: parseConfig(process.env.BOT_AI_CHAT_PARAMS_TOKENS) || 120,
+          frequency_penalty:
+            parseConfig(process.env.BOT_AI_CHAT_PARAMS_FRQ) || 0.2,
+          presence_penalty:
+            parseConfig(process.env.BOT_AI_CHAT_PARAMS_PRS) || 0.2,
+        },
       },
       waitForTicks: parseConfig(process.env.BOT_WAIT_FOR_TICKS) || 30,
       exportFolder: parseConfig(process.env.BOT_EXPORT_FOLDER) || "_log",

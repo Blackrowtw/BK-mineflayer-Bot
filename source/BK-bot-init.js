@@ -15,7 +15,7 @@ const {
   DARK_RED,
   SKY,
   BLACK,
-  YELLOW,
+  GOLD,
   REVERSE,
 } = require("./escapeCodeANSI.js");
 
@@ -40,7 +40,7 @@ const { initMineflayerViewer } = require("./module/init_MineflayerViewer.js");
 const { initPathfinder } = require("./module/init_Pathfinder.js");
 const { initPVP } = require("./module/init_PVP.js");
 const { initTool } = require("./module/init_Tool.js");
-const { initAIChat } = require("./module/init_AIChat_Ollama.js");
+const { initAIChat } = require("./module/init_AIChat.js");
 
 // bot Listeners Events 引用
 const { botOnSpawn, getBotSpawnState } = require("./module/botOnSpawn.js");
@@ -133,13 +133,13 @@ async function handleLoginOnce(loginConfig) {
   const serverIP = `${loginConfig.host.split(".").slice(0, 2).join(".")}.*.***`;
   console.log(
     `\n${REVERSE}  Server  ${resetANSI} :: Login to ` +
-      `${YELLOW}[${serverIP}]:${loginConfig.port}${resetANSI} ` +
+      `${GOLD}[${serverIP}]:${loginConfig.port}${resetANSI} ` +
       `(v_${loginConfig.version})`
   );
 }
 
 /*  <<監聽事件>> 處理 Bot 生成
- * Bot 成功登入並生成後 初始化的步驟 只執行一次
+ * Bot 成功登入並生成後 初始化的步驢 只執行一次
  * */
 async function handleSpawnOnce(bot, botID, cli) {
   try {
@@ -423,29 +423,38 @@ function calculateNextDelay(attempt, config) {
 
 // 清理舊 bot 引數
 async function performCleanup(bot) {
-  // 清理 CLI 例項
-  await state.currentCli.close();
-  state.currentCli = null;
+  try {
+    // 關閉 Ollama 服務
+    if (bot?.aiChat?.ollamaManager) {
+      await bot.aiChat.ollamaManager.shutdown();
+    }
 
-  // 清理 Bot 監聽器
-  if (bot) {
-    bot.removeAllListeners();
-    try {
-      bot.quit();
-    } catch {}
-    try {
-      bot.end();
-    } catch {}
+    // 清理 mineflayerViewer
+    if (bot?.viewer) {
+      bot.viewer.close();
+    }
+
+    // 清理 CLI 例項
+    if (state.currentCli) {
+      await state.currentCli.close();
+      state.currentCli = null;
+    }
+
+    // 清理 Bot 監聽器
+    if (bot) {
+      bot.removeAllListeners();
+      try {
+        await bot.quit();
+      } catch {}
+      try {
+        await bot.end();
+      } catch {}
+    }
+
+    console.log(`${BLACK}[initBot] Perform cleanup finished.${resetANSI}`);
+  } catch (error) {
+    console.error(`${RED}[initBot] 清理資源時發生錯誤:${resetANSI}`, error);
   }
-
-  // 清理 mineflayerViewer
-  let viewer = null;
-  viewer = bot?.viewer ?? null;
-  if (viewer) {
-    bot.viewer.close();
-  }
-
-  console.log(`${BLACK}[botRespawn] Perform cleanup finished.${resetANSI}`);
 }
 
 /*  <<輔助函式>>
@@ -455,14 +464,13 @@ async function showServerInfo(bot) {
   const gameRT = formatMinecraftTime(bot.time.bigAge);
   const realRT = formatRealTime(bot.time.bigAge);
   const serverInfo = [
-    `Server is ${YELLOW}${bot.game.serverBrand ?? "Unknow"}${resetANSI}`,
-    `RunTimes: ${YELLOW}${gameRT ?? "Unknow"}${resetANSI} ` +
-      `${realRT ?? ""}\n`,
-    `ViewDistance: ${YELLOW}${
+    `Server is ${GOLD}${bot.game.serverBrand ?? "Unknow"}${resetANSI}`,
+    `RunTimes: ${GOLD}${gameRT ?? "Unknow"}${resetANSI} ` + `${realRT ?? ""}\n`,
+    `ViewDistance: ${GOLD}${
       bot.game.serverViewDistance ?? "Unknow"
     }${resetANSI}`,
-    `Difficulty: ${YELLOW}${bot.game.difficulty ?? "Unknow"}${resetANSI}`,
-    `WorldSpwan: ${YELLOW}${bot.spawnPoint ?? "Unknow"}${resetANSI}`,
+    `Difficulty: ${GOLD}${bot.game.difficulty ?? "Unknow"}${resetANSI}`,
+    `WorldSpwan: ${GOLD}${bot.spawnPoint ?? "Unknow"}${resetANSI}`,
   ].join(" | ");
 
   bot.logTimer(`${serverInfo}`);
@@ -479,13 +487,19 @@ async function showServerInfo(bot) {
     }
   };
   bot.logTimer(
-    `Players: ${YELLOW}${playerCount}${resetANSI}/${maxPlayers} online, [ ${playerNames()} ]`
+    `Players: ${GOLD}${playerCount}${resetANSI}/${maxPlayers} online, [ ${playerNames()} ]`
   );
 }
 
 // 處理遊戲內時間轉換
 function formatMinecraftTime(worldAge) {
   const numWorldAge = Number(worldAge);
+
+  // 如果是負數，直接返回原始值（帶千分位）
+  if (numWorldAge < 0) {
+    return `${numWorldAge.toLocaleString("en-US")}`;
+  }
+
   const TICKS_PER_DAY = 24000;
   const totalGameDays = Math.floor(numWorldAge / TICKS_PER_DAY);
   const showGameDays = totalGameDays.toLocaleString("en-US");
@@ -495,6 +509,10 @@ function formatMinecraftTime(worldAge) {
 // 處理遊戲內時間到現實時間轉換
 function formatRealTime(worldAge) {
   const numWorldAge = Number(worldAge);
+
+  // 處理負數或無效輸入
+  if (numWorldAge < 0 || isNaN(numWorldAge)) return null;
+
   const TICKS_PER_DAY = 24000;
   const REAL_MINUTES_PER_DAY = 20;
 
@@ -579,17 +597,30 @@ function checkModuleType(bot, targetModule, displayName, type2check) {
   }
 }
 
-// 退出機制
-process.on("SIGINT", () => {
-  performCleanup(state.currentBot);
+// 程序終止處理
+async function handleProcessTermination(signal) {
   console.log(
-    `> [initBot] Process close by manually type ${BOLD_RED}<Ctrl^C>${resetANSI}.`
+    `> [initBot] Receive ${BOLD_MAGENTA}${signal}${resetANSI} signal, start cleanup...`
   );
-  // 結束整個程式
+  await performCleanup(state.currentBot);
+  console.log(
+    `[initBot] Process close by: ${BOLD_MAGENTA}${signal}${resetANSI}`
+  );
   console.log(
     `\n${REVERSE}   Stop   ${resetANSI} :: Process exit. See you again!\n`
   );
-  process.exit(0); // 0: 正常退出 1: 異常退出
+  process.exit(0);
+}
+
+// 註冊信號處理器
+process.on("SIGINT", () => handleProcessTermination("SIGINT")); // Ctrl+C
+process.on("SIGTERM", () => handleProcessTermination("SIGTERM")); // kill
+process.on("beforeExit", () => handleProcessTermination("beforeExit"));
+
+// 捕獲未處理的 Promise 拒絕
+process.on("unhandledRejection", async (reason, promise) => {
+  console.error("未處理的 Promise 拒絕:", reason);
+  // await handleProcessTermination("unhandledRejection");
 });
 
 module.exports = {
