@@ -30,7 +30,7 @@ module.exports = [
     aliases: ["kill", "結束", "退出"],
     execute: async (bot, cmd, options) => {
       // 文字顏色 ANSI 控制碼常量
-      const { resetANSI, BLACK, REVERSE } = require("../../escapeCodeANSI.js");
+      const { resetANSI, BLACK, REVERSE } = require("../escapeCodeANSI.js");
       const botConfig = bot.Bot_Config;
       const waitForTicks = botConfig.waitForTicks || 60;
       await bot.waitForTicks(5);
