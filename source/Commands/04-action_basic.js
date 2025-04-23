@@ -105,12 +105,12 @@ module.exports = [
         const cmdSenderID =
           (await bot.actions.findPlayerFuzzy(bot, options.cmdSender)) || null;
         const check = Boolean(cmdSenderID !== null);
-        if (!check) {
+        if (check) {
+          const e = cmdSenderID.entity;
+          await bot.lookAt(e.position.offset(0, e.eyeHeight, 0));
+        } else {
           await bot.waitForTicks(5);
           await bot.safeChat(`Ooh, where's my lover?`);
-        } else {
-          const e = cmdSenderID;
-          await bot.lookAt(e.position.offset(0, e.eyeHeight, 0));
         }
         await bot.waitForTicks(5);
         await bot.swingArm();
@@ -131,12 +131,12 @@ module.exports = [
         const cmdSenderID =
           (await bot.actions.findPlayerFuzzy(bot, options.cmdSender)) || null;
         const check = Boolean(cmdSenderID !== null);
-        if (!check) {
+        if (check) {
+          const e = cmdSenderID.entity;
+          await bot.lookAt(e.position.offset(0, e.eyeHeight, 0));
+        } else {
           await bot.waitForTicks(5);
           await bot.safeChat(`Ooh, where's my lover?`);
-        } else {
-          const e = cmdSenderID;
-          await bot.lookAt(e.position.offset(0, e.eyeHeight, 0));
         }
         await bot.waitForTicks(5);
         await bot.swingArm();
@@ -157,12 +157,12 @@ module.exports = [
         const cmdSenderID =
           (await bot.actions.findPlayerFuzzy(bot, options.cmdSender)) || null;
         const check = Boolean(cmdSenderID !== null);
-        if (!check) {
+        if (check) {
+          const e = cmdSenderID.entity;
+          await bot.lookAt(e.position.offset(0, e.eyeHeight, 0));
+        } else {
           await bot.waitForTicks(5);
           await bot.safeChat(`Ooh, where's my lover?`);
-        } else {
-          const e = cmdSenderID;
-          await bot.lookAt(e.position.offset(0, e.eyeHeight, 0));
         }
         await bot.waitForTicks(5);
         await bot.swingArm();
@@ -183,12 +183,12 @@ module.exports = [
         const cmdSenderID =
           (await bot.actions.findPlayerFuzzy(bot, options.cmdSender)) || null;
         const check = Boolean(cmdSenderID !== null);
-        if (!check) {
+        if (check) {
+          const e = cmdSenderID.entity;
+          await bot.lookAt(e.position.offset(0, e.eyeHeight, 0));
+        } else {
           await bot.waitForTicks(5);
           await bot.safeChat(`Ooh, where's my lover?`);
-        } else {
-          const e = cmdSenderID;
-          await bot.lookAt(e.position.offset(0, e.eyeHeight, 0));
         }
         await bot.waitForTicks(5);
         await bot.swingArm();
@@ -222,12 +222,12 @@ module.exports = [
         const cmdSenderID =
           (await bot.actions.findPlayerFuzzy(bot, options.cmdSender)) || null;
         const check = Boolean(cmdSenderID !== null);
-        if (!check) {
+        if (check) {
+          const e = cmdSenderID.entity;
+          await bot.lookAt(e.position.offset(0, e.eyeHeight, 0));
+        } else {
           await bot.waitForTicks(5);
           await bot.safeChat(`Ooh, where's my lover?`);
-        } else {
-          const e = cmdSenderID;
-          await bot.lookAt(e.position.offset(0, e.eyeHeight, 0));
         }
         await bot.waitForTicks(5);
         await bot.safeChat(`我還沒上車阿！`);
@@ -243,12 +243,12 @@ module.exports = [
       const cmdSenderID =
         (await bot.actions.findPlayerFuzzy(bot, options.cmdSender)) || null;
       const check = Boolean(cmdSenderID !== null);
-      if (!check) {
+      if (check) {
+        const e = cmdSenderID.entity;
+        await bot.lookAt(e.position.offset(0, e.eyeHeight, 0));
+      } else {
         await bot.waitForTicks(5);
         await bot.safeChat(`Ooh, where's my lover?`);
-      } else {
-        const e = cmdSenderID;
-        await bot.lookAt(e.position.offset(0, e.eyeHeight, 0));
       }
       return check;
     },
@@ -266,12 +266,12 @@ module.exports = [
       const cmdSenderID =
         (await bot.actions.findPlayerFuzzy(bot, options.cmdSender)) || null;
       const check = Boolean(cmdSenderID !== null);
-      if (!check) {
+      if (check) {
+        const e = cmdSenderID.entity;
+        await bot.lookAt(e.position.offset(0, e.eyeHeight, 0));
+      } else {
         await bot.waitForTicks(5);
         await bot.safeChat(`Ooh, where's my lover?`);
-      } else {
-        const e = cmdSenderID;
-        await bot.lookAt(e.position.offset(0, e.eyeHeight, 0));
       }
       return check;
     },
