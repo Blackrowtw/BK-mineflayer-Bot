@@ -29,6 +29,7 @@ module.exports = [
       const { accept, parsed } = await LCM.parseOptions(bot, cmd, options);
       console.log({ accept, parsed });
       if (!accept) return;
+      await LCM.cmdFailedMsg(bot, cmd);
     },
     onStop: async (bot, cmd, options) => {},
     group: ``,
