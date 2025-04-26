@@ -73,15 +73,28 @@ async function main() {
           parseConfig(process.env.BOT_CHAT_HELLO_WORLD) ||
           "Hello World! I'm mineflayer Bot.",
       },
-      viewerSetting: {
-        isEnabled: parseConfig(process.env.BOT_WEB_VIEWER) || false,
-        port: parseConfig(process.env.BOT_WEB_VIEWER_PORT) || 3000,
-      },
       pathfinderSetting: {
         canDig: parseConfig(process.env.BOT_PATH_CANDIG) || false,
         allow1by1towers: parseConfig(process.env.BOT_PATH_1X1TOWER) || false,
         canOpenDoors: parseConfig(process.env.BOT_PATH_CANOPENDOOR) || true,
         canScafBlocksName: parseConfig(process.env.BOT_PATH_SCAF_BLOCKS) || [],
+      },
+      homeSetting: {
+        homePos: {
+          x: parseConfig(process.env.BOT_HOME_X) || 0,
+          y: parseConfig(process.env.BOT_HOME_Y) || 0,
+          z: parseConfig(process.env.BOT_HOME_Z) || 0,
+        },
+        bedPos: {
+          x: parseConfig(process.env.BOT_HOME_BED_X) || 0,
+          y: parseConfig(process.env.BOT_HOME_BED_Y) || 0,
+          z: parseConfig(process.env.BOT_HOME_BED_Z) || 0,
+        },
+        containers: [],
+      },
+      viewerSetting: {
+        isEnabled: parseConfig(process.env.BOT_WEB_VIEWER) || false,
+        port: parseConfig(process.env.BOT_WEB_VIEWER_PORT) || 3000,
       },
       aiChatSetting: {
         isEnabled: parseConfig(process.env.BOT_AI_CHAT) || false,

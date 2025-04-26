@@ -252,4 +252,101 @@ module.exports = [
     group: `Action_Advanced`,
     description: `讓 Bot 與指定方塊名稱，或指定座標互動`,
   },
+  {
+    name: "home",
+    aliases: ["home"],
+    paramRules: [
+      {
+        name: ["options"],
+        desc: ["選項"],
+        type: ["string"],
+        required: [true],
+        helpMsg: "<options>: ...",
+      },
+    ],
+    interval: null,
+    execute: async (bot, cmd, options) => {
+      await bot.waitForTicks(5);
+      const LCM = bot.loopableCommandManager;
+      const util = await bot.actions.utils(bot);
+      const { accept, parsed } = await LCM.parseOptions(bot, cmd, options);
+
+      if (parsed?.options) {
+        const option = parsed.options.toLowerCase();
+        if (option === "info") {
+          showHomeMsg();
+        } else if (option === "set") {
+          const homeConfig = bot.Bot_Config.homeSetting;
+          const bedBlock = await util.findBlockByName("bed");
+          const containers = await util.findBlocksByArray(
+            ["chest", "barrel", "shulker_box"],
+            { count: 128 }
+          );
+          homeConfig.homePos = bot.entity.position.offset(0, 0, 0).floor(); //向下取整
+          homeConfig.bedPos = bedBlock?.position ?? homeConfig.bedPos;
+          homeConfig.containers = containers ?? homeConfig.containers;
+          showSetHomeMsg();
+        } else if (option === "sleep") {
+          const bedPos = bot.Bot_Config.homeSetting.bedPos;
+          await bot.safeChat(
+            `前往我的床 (${bedPos.x}, ${bedPos.y}, ${bedPos.z})`,
+            `🛌`
+          );
+          const gotoBed = await util.gotoNear(bedPos);
+          if (!gotoBed) {
+            await bot.safeChat(`我找不到我家的床`, `😱`);
+            return;
+          }
+          await bot.actions.sleepOnBed(bot);
+        } else {
+          await LCM.cmdFailedMsg(bot, cmd);
+        }
+      } else {
+        // 如果沒有傳入選項，則默認回家
+        const homePos = bot.Bot_Config.homeSetting.homePos;
+        await bot.safeChat(
+          `前往我的家 (${homePos.x}, ${homePos.y}, ${homePos.z})`,
+          `🏕`
+        );
+
+        const goHome = await util.gotoNear(homePos, 0);
+        if (!goHome) {
+          await bot.safeChat(`我不知道怎麼回家`, `😱`);
+        }
+      }
+
+      function showHomeMsg() {
+        const homeConfig = bot.Bot_Config.homeSetting;
+        const containerCount = homeConfig.containers.length;
+        const containerMsg =
+          containerCount > 0
+            ? `我家有 ${containerCount} 個容器可以存放物資`
+            : `我家沒有地方可以存放物資`;
+        bot.safeChat(
+          `🏕 我的家在: (${homeConfig.homePos.x}, ${homeConfig.homePos.y}, ${homeConfig.homePos.z})，` +
+            `🛌 我的床在: (${homeConfig.bedPos.x}, ${homeConfig.bedPos.y}, ${homeConfig.bedPos.z}) `,
+          ``
+        );
+        bot.safeChat(`${containerMsg}`, `🧰`);
+      }
+
+      function showSetHomeMsg() {
+        const homeConfig = bot.Bot_Config.homeSetting;
+        const containerCount = homeConfig.containers.length;
+        const containerMsg =
+          containerCount > 0
+            ? `重新檢查我家... 有 ${containerCount} 個容器可以存放物資`
+            : `重新檢查我家... 沒有地方可以存放物資`;
+        bot.safeChat(
+          `🏕 我新的家在: (${homeConfig.homePos.x}, ${homeConfig.homePos.y}, ${homeConfig.homePos.z})，` +
+            `🛌 我新的床在: (${homeConfig.bedPos.x}, ${homeConfig.bedPos.y}, ${homeConfig.bedPos.z}) `,
+          ``
+        );
+        bot.safeChat(`${containerMsg}`, `🧰`);
+      }
+    },
+    onStop: async (bot, cmd, options) => {},
+    group: `Action_Advanced`,
+    description: `讓 Bot 前往家的位置，可設定家與床的座標`,
+  },
 ];
