@@ -268,9 +268,10 @@ class LoopableCommandManager {
     const stopTime = Date.now();
     cmd.stopTime = stopTime; // 新增停止時間屬性
 
-    // 計算執行次數
+    // 計算執行次數（添加默認值處理）
     if (cmd.interval === 0 || cmd.interval === null) {
       cmd.runtimeCounter = 1; // 單次命令直接記1次
+      cmd.runCount = 1; // 確保單次命令也有 runCount
     } else {
       const duration = stopTime - cmd.startTime;
       cmd.lastDuration = this._formatDuration(cmd.startTime);
@@ -328,12 +329,16 @@ class LoopableCommandManager {
     if (successCount > 0) {
       statusLines.push(
         "\n⛔ 已停止命令列表:",
-        ...result.stoppedCommands.map(
-          (cmd, index) =>
+        ...result.stoppedCommands.map((cmd, index) => {
+          // 安全地取得執行次數，如果是 undefined 則顯示 0
+          const runCount = cmd.runCount ?? 0;
+
+          return (
             `${index + 1}. ${cmd.name} (${cmd.nickname})` +
-            ` ▸ 執行時間: ${cmd.lastDuration}` +
-            ` ▸ 次數: ⏱ ${cmd.runCount.toLocaleString("en-US")}`
-        )
+            ` ▸ 執行時間: ${cmd.lastDuration || "無紀錄"}` +
+            ` ▸ 次數: ⏱ ${runCount.toLocaleString("en-US")}`
+          );
+        })
       );
     }
 
