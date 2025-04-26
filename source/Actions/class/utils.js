@@ -83,6 +83,93 @@ Object.entries(bot.entities)
         .map(({ entity }) => entity)
     ); // 最終返回純實體陣列
   }
+
+  findBlockByName(blockName, options = {}) {
+    const { maxDistance = 16, exactMatch = true, fuzzyMatch = true } = options;
+
+    const searchConfig = {
+      maxDistance,
+      matching: (block) => {
+        if (!block) return false;
+        return (
+          (exactMatch && block.name === blockName) ||
+          (fuzzyMatch && block.name.includes(blockName))
+        );
+      },
+    };
+
+    return this.bot.findBlock(searchConfig);
+  }
+
+  findBlocksByArray(blockNames = [], options = {}) {
+    const {
+      maxDistance = 16,
+      exactMatch = true,
+      fuzzyMatch = true,
+      count = 16, // 預設返回數量
+    } = options;
+
+    const searchConfig = {
+      matching: (block) => {
+        if (!block) return false;
+        // 對陣列中的每個方塊名稱進行匹配
+        return blockNames.some(
+          (name) =>
+            (exactMatch && block.name === name) ||
+            (fuzzyMatch && block.name.includes(name))
+        );
+      },
+      maxDistance,
+      count,
+    };
+
+    return this.bot.findBlocks(searchConfig);
+  }
+
+  async gotoNear(pos, range = 3, timeout = 15000) {
+    // 檢查目標位置是否有效
+    try {
+      const block = this.bot.blockAt(pos);
+      if (!block) return false;
+    } catch (error) {
+      return false;
+    }
+    // 執行目標設定與尋路過程
+    try {
+      const { GoalNear } = this.bot.goals;
+      const goal = new GoalNear(pos.x, pos.y, pos.z, range);
+      const startTime = Date.now();
+      // 前往目標 並且進行超時檢查
+      await this.bot.pathfinder.setGoal(goal);
+      await Promise.race([
+        new Promise((resolve) => this.bot.once("goal_reached", resolve)),
+        new Promise((_, reject) =>
+          setTimeout(() => reject(new Error("尋路超時")), timeout)
+        ),
+      ]);
+      const timeSpent = ((Date.now() - startTime) / 1000).toFixed(1);
+      await this.bot.safeChat(`已到達，路程花了 ${timeSpent} 秒`, `✅`);
+      return true;
+    } catch (error) {
+      // 處理尋路過程中的錯誤
+      await this.bot.pathfinder.stop();
+      const timeSpent = (timeOut / 1000).toFixed(0);
+
+      if (error.message === "尋路超時") {
+        await this.bot.safeChat(`尋路時間已超過 ${timeSpent} 秒，已停止`, `⛔`);
+      } else {
+        await this.bot.safeChat(`尋路過程出現錯誤: ${error.name}`, `⛔`);
+      }
+      // console.log(`${error.stack}`);
+      console.logTimer("當前 Bot 狀態:", {
+        position: this.bot.entity.position,
+        onGround: this.bot.entity.onGround,
+        isInWater: this.bot.entity.isInWater,
+        isInLava: this.bot.entity.isInLava,
+      });
+      return false;
+    }
+  }
 }
 
 // 工廠函數

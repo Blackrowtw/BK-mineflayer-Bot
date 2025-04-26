@@ -127,7 +127,7 @@ module.exports = [
         await LCM.cmdFailedMsg(bot, cmd); // 無效參數
       }
 
-      // 執行目標設定 與巡路過程
+      // 執行目標設定與尋路過程
       try {
         const goal = new GoalNear(pos.x, pos.y, pos.z, 0);
         const startTime = Date.now();
@@ -142,6 +142,7 @@ module.exports = [
         const timeSpent = ((Date.now() - startTime) / 1000).toFixed(1);
         await bot.safeChat(`已到達，路程花了 ${timeSpent} 秒`, `✅`);
       } catch (error) {
+        // 處理尋路過程中的錯誤
         await bot.pathfinder.stop();
         const timeSpent = (timeOut / 1000).toFixed(0);
 
@@ -150,7 +151,6 @@ module.exports = [
         } else {
           await bot.safeChat(`尋路過程出現錯誤: ${error.name}`, `⛔`);
         }
-
         console.logTimer("當前 Bot 狀態:", {
           position: bot.entity.position,
           onGround: bot.entity.onGround,
