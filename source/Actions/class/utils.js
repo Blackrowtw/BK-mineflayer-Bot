@@ -85,45 +85,172 @@ Object.entries(bot.entities)
   }
 
   findBlockByName(blockName, options = {}) {
-    const { maxDistance = 16, exactMatch = true, fuzzyMatch = true } = options;
+    const {
+      r = 16, // maxDistance 的縮寫
+      m = null, // metadata 的縮寫
+      p = null, // point 的縮寫
+      exactMatch = true,
+      fuzzyMatch = true,
+      maxDistance = r,
+      metadata = m,
+      point = p,
+    } = options;
 
     const searchConfig = {
-      maxDistance,
+      point: point,
+      maxDistance: maxDistance,
       matching: (block) => {
         if (!block) return false;
-        return (
+
+        const nameMatch =
           (exactMatch && block.name === blockName) ||
-          (fuzzyMatch && block.name.includes(blockName))
-        );
+          (fuzzyMatch && block.name.includes(blockName));
+
+        if (metadata !== null) {
+          return nameMatch && block.metadata === metadata;
+        }
+
+        return nameMatch;
       },
     };
 
     return this.bot.findBlock(searchConfig);
   }
 
-  findBlocksByArray(blockNames = [], options = {}) {
+  findBlocksByNameArray(blockNames = [], options = {}) {
     const {
-      maxDistance = 16,
+      r = 16, // maxDistance 的縮寫
+      c = 16, // count 的縮寫
+      m = null, // metadata 的縮寫
+      p = null, // point 的縮寫
       exactMatch = true,
       fuzzyMatch = true,
-      count = 16, // 預設返回數量
+      maxDistance = r,
+      count = c,
+      metadata = m,
+      point = p,
     } = options;
 
     const searchConfig = {
+      maxDistance: maxDistance,
+      count: count,
+      point: point,
       matching: (block) => {
         if (!block) return false;
-        // 對陣列中的每個方塊名稱進行匹配
-        return blockNames.some(
+
+        const nameMatch = blockNames.some(
           (name) =>
             (exactMatch && block.name === name) ||
             (fuzzyMatch && block.name.includes(name))
         );
+
+        if (metadata !== null) {
+          return nameMatch && block.metadata === metadata;
+        }
+
+        return nameMatch;
       },
-      maxDistance,
-      count,
     };
 
     return this.bot.findBlocks(searchConfig);
+  }
+
+  async findBlockWithRule(blockNameA, blockNameB, rule = "top", range = 16) {
+    // 定義檢查方向
+    const directions = {
+      top: [{ x: 0, y: 1, z: 0 }],
+      bottom: [{ x: 0, y: -1, z: 0 }],
+      side: [
+        { x: 1, y: 0, z: 0 }, // 東
+        { x: -1, y: 0, z: 0 }, // 西
+        { x: 0, y: 0, z: 1 }, // 南
+        { x: 0, y: 0, z: -1 }, // 北
+      ],
+      near: [
+        { x: 0, y: 1, z: 0 }, // 上
+        { x: 0, y: -1, z: 0 }, // 下
+        { x: 1, y: 0, z: 0 }, // 東
+        { x: -1, y: 0, z: 0 }, // 西
+        { x: 0, y: 0, z: 1 }, // 南
+        { x: 0, y: 0, z: -1 }, // 北
+      ],
+    };
+
+    // 檢查參數是否有效
+    if (!this.bot.registry.blocksByName[blockNameA]) {
+      return null;
+    }
+    if (!this.bot.registry.blocksByName[blockNameB]) {
+      return null;
+    }
+
+    // 獲取要檢查的方向陣列
+    const checkDirections = directions[rule.toLowerCase()] || directions.top;
+
+    try {
+      return this.bot.findBlock({
+        matching: this.bot.registry.blocksByName[blockNameA].id,
+        maxDistance: range,
+        useExtraInfo: (block) => {
+          if (!block) return false;
+
+          // 檢查指定方向是否有符合條件的方塊
+          return checkDirections.some((dir) => {
+            const checkPos = block.position.offset(dir.x, dir.y, dir.z);
+            const checkBlock = this.bot.blockAt(checkPos);
+            return checkBlock && checkBlock.name === blockNameB;
+          });
+        },
+      });
+    } catch (error) {
+      console.log(`[utils] findBlockWithRule 錯誤: ${error.message}`);
+      return null;
+    }
+  }
+
+  async equipItemByName(itemName) {
+    try {
+      const items = this.bot.inventory.items(); // 取得背包中的所有物品
+      const item = items.find((item) => item.name === itemName);
+      if (!item) return false; // 如果找不到物品，返回 false
+      await this.bot.equip(this.bot.registry.itemsByName[itemName].id, "hand");
+      return true;
+    } catch (e) {
+      console.log(`[utils] equipItemByName Error(${itemName}): ${e.message}`);
+      return false;
+    }
+  }
+
+  async moveItemsByGUI(gui, itemName, keepCount = 0) {
+    const items = this.bot.inventory
+      .items()
+      .filter((item) => item.name === itemName);
+
+    // 如果沒有指定物品，直接返回 false
+    if (!items || items.length === 0) return false;
+
+    try {
+      for (const item of items) {
+        const count = item.count;
+        if (keepCount > 0) {
+          if (count <= keepCount) {
+            keepCount -= count;
+            continue;
+          }
+          await gui.deposit(item.type, null, count - keepCount);
+          keepCount = 0;
+        } else {
+          await gui.deposit(item.type, null, count);
+        }
+        await this.bot.waitForTicks(2);
+      }
+      return true;
+    } catch (error) {
+      console.log(
+        `[utils] moveItemsByGUI 存放 ${itemName} 時發生錯誤: ${error.message}`
+      );
+      return false;
+    }
   }
 
   async gotoNear(pos, range = 3, timeout = 15000) {
@@ -138,7 +265,9 @@ Object.entries(bot.entities)
     try {
       const { GoalNear } = this.bot.goals;
       const goal = new GoalNear(pos.x, pos.y, pos.z, range);
-      const startTime = Date.now();
+      await this.bot.pathfinder.setGoal(null);
+      await this.bot.lookAt(pos);
+      await this.bot.waitForTicks(4);
       // 前往目標 並且進行超時檢查
       await this.bot.pathfinder.setGoal(goal);
       await Promise.race([
@@ -147,25 +276,21 @@ Object.entries(bot.entities)
           setTimeout(() => reject(new Error("尋路超時")), timeout)
         ),
       ]);
-      const timeSpent = ((Date.now() - startTime) / 1000).toFixed(1);
-      await this.bot.safeChat(`已到達，路程花了 ${timeSpent} 秒`, `✅`);
       return true;
     } catch (error) {
       // 處理尋路過程中的錯誤
       await this.bot.pathfinder.stop();
-      const timeSpent = (timeOut / 1000).toFixed(0);
-
+      const timeSpent = (timeout / 1000).toFixed(0);
       if (error.message === "尋路超時") {
-        await this.bot.safeChat(`尋路時間已超過 ${timeSpent} 秒，已停止`, `⛔`);
+        await this.bot.safeChat(`[utils] gotoNear 超時 ${timeSpent} 秒`, `⛔`);
       } else {
-        await this.bot.safeChat(`尋路過程出現錯誤: ${error.name}`, `⛔`);
+        await this.bot.safeChat(`[utils] gotoNear 錯誤: ${error.name}`, `⛔`);
       }
       // console.log(`${error.stack}`);
       console.logTimer("當前 Bot 狀態:", {
         position: this.bot.entity.position,
         onGround: this.bot.entity.onGround,
         isInWater: this.bot.entity.isInWater,
-        isInLava: this.bot.entity.isInLava,
       });
       return false;
     }

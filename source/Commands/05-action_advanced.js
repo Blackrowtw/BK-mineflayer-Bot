@@ -278,7 +278,7 @@ module.exports = [
         } else if (option === "set") {
           const homeConfig = bot.Bot_Config.homeSetting;
           const bedBlock = await util.findBlockByName("bed");
-          const containers = await util.findBlocksByArray(
+          const containers = await util.findBlocksByNameArray(
             ["chest", "barrel", "shulker_box"],
             { count: 128 }
           );
